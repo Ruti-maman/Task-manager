@@ -7,17 +7,13 @@
                 Back to Teams
             </button>
         </div>
-        <div class="user-badge">
-            <mat-icon>person</mat-icon>
-            <span>{{ userName }}</span>
-        </div>
         <div class="title-section">
             <div class="title-icon">
                 <mat-icon>folder_special</mat-icon>
             </div>
             <div class="title-text">
-                <h1>{{ teamName || 'Team' }} Projects</h1>
-                <p class="subtitle">Manage projects for this team</p>
+                <h1>{{ userName }}'s Projects</h1>
+                <p class="subtitle">{{ teamName || 'Team' }} - Manage projects</p>
             </div>
         </div>
         <button mat-raised-button class="add-btn" (click)="openAddProjectDialog()">

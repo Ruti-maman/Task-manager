@@ -7,17 +7,13 @@
                 Back
             </button>
         </div>
-        <div class="user-badge">
-            <mat-icon>person</mat-icon>
-            <span>{{ userName }}</span>
-        </div>
         <div class="title-section">
             <div class="title-icon">
                 <mat-icon>assignment</mat-icon>
             </div>
             <div class="title-text">
-                <h1>{{ projectName || 'Project' }} Tasks</h1>
-                <p class="subtitle">Manage and organize your tasks</p>
+                <h1>{{ userName }}'s Tasks</h1>
+                <p class="subtitle">{{ projectName || 'Project' }} - Manage tasks</p>
             </div>
         </div>
         <button class="add-btn" (click)="openAddTaskDialog()">
