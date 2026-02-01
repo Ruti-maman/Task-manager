@@ -181,7 +181,16 @@ import { CommentsService } from '../../../services/comments.service';
     }
 
     .note-input ::ng-deep .mat-mdc-form-field-flex {
-      background: #f8f9fa;
+      background: white;
+    }
+
+    .note-input ::ng-deep .mat-mdc-text-field-wrapper {
+      border: 2px solid #4caf50 !important;
+      border-radius: 8px !important;
+    }
+
+    .note-input ::ng-deep .mdc-notched-outline {
+      display: none;
     }
 
     .add-note-btn {
