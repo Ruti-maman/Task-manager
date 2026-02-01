@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { apiUrl } from '../../config';
 import { AddTaskDialogComponent } from './add-task-dialog/add-task-dialog';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog';
+import { TaskNotesDialogComponent } from './task-notes-dialog/task-notes-dialog';
 
 @Component({
   selector: 'app-tasks',
@@ -150,6 +151,16 @@ export class Tasks implements OnInit {
           },
           error: (err) => console.error('Error deleting task:', err),
         });
+      }
+    });
+  }
+
+  openNotes(task: any) {
+    this.dialog.open(TaskNotesDialogComponent, {
+      width: '500px',
+      data: { 
+        taskId: task.id, 
+        taskTitle: task.title 
       }
     });
   }

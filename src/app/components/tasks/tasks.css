@@ -251,6 +251,36 @@
     margin-bottom: 8px;
 }
 
+.task-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notes-btn {
+    background: none;
+    border: none;
+    color: #4caf50;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.2s;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notes-btn:hover {
+    background: rgba(76, 175, 80, 0.1);
+    transform: scale(1.1);
+}
+
+.notes-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
 .delete-btn {
     background: none;
     border: none;

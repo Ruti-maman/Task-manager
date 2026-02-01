@@ -35,9 +35,14 @@
                 <div class="task-card">
                     <div class="task-header">
                         <span class="task-title">{{ task.title }}</span>
-                        <button class="delete-btn" (click)="deleteTask(task.id)">
-                            <mat-icon>close</mat-icon>
-                        </button>
+                        <div class="task-header-actions">
+                            <button class="notes-btn" (click)="openNotes(task)" title="Notes">
+                                <mat-icon>sticky_note_2</mat-icon>
+                            </button>
+                            <button class="delete-btn" (click)="deleteTask(task.id)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
                     </div>
                     <p class="task-desc">{{ task.description || 'No description' }}</p>
 
@@ -69,9 +74,14 @@
                 <div class="task-card">
                     <div class="task-header">
                         <span class="task-title">{{ task.title }}</span>
-                        <button class="delete-btn" (click)="deleteTask(task.id)">
-                            <mat-icon>close</mat-icon>
-                        </button>
+                        <div class="task-header-actions">
+                            <button class="notes-btn" (click)="openNotes(task)" title="Notes">
+                                <mat-icon>sticky_note_2</mat-icon>
+                            </button>
+                            <button class="delete-btn" (click)="deleteTask(task.id)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
                     </div>
                     <p class="task-desc">{{ task.description || 'No description' }}</p>
                     <div class="priority-chip" [class.p-high]="task.priority === 'High'"
@@ -105,9 +115,14 @@
                 <div class="task-card done-card">
                     <div class="task-header">
                         <span class="task-title">{{ task.title }}</span>
-                        <button class="delete-btn" (click)="deleteTask(task.id)">
-                            <mat-icon>close</mat-icon>
-                        </button>
+                        <div class="task-header-actions">
+                            <button class="notes-btn" (click)="openNotes(task)" title="Notes">
+                                <mat-icon>sticky_note_2</mat-icon>
+                            </button>
+                            <button class="delete-btn" (click)="deleteTask(task.id)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
                     </div>
                     <div class="priority-chip p-low">Completed ✅</div>
 
