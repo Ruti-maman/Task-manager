@@ -24,6 +24,7 @@ export class Tasks implements OnInit {
   projectId: string = '';
   projectName: string = '';
   allProjects: any[] = [];
+  userName: string = 'User';
 
   constructor(
     private route: ActivatedRoute,
@@ -37,6 +38,15 @@ export class Tasks implements OnInit {
     this.projectId = this.route.snapshot.paramMap.get('projectId') || '';
     this.loadTasks();
     this.loadProjects();
+    this.loadUserName();
+  }
+
+  loadUserName() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.name || user.email?.split('@')[0] || 'User';
+    }
   }
 
   goBack() {

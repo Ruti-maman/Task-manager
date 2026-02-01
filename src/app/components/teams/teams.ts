@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog'
 })
 export class Teams implements OnInit {
   teams: any[] = [];
+  userName: string = 'User';
 
   constructor(
     private http: HttpClient,
@@ -26,6 +27,15 @@ export class Teams implements OnInit {
 
   ngOnInit() {
     this.loadTeams();
+    this.loadUserName();
+  }
+
+  loadUserName() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.name || user.email?.split('@')[0] || 'User';
+    }
   }
 
   loadTeams() {

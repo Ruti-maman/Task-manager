@@ -28,6 +28,7 @@ export class Projects implements OnInit {
   projects: any[] = [];
   teamId: string = '';
   teamName: string = '';
+  userName: string = 'User';
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,15 @@ export class Projects implements OnInit {
     this.teamId = this.route.snapshot.paramMap.get('teamId') || '';
     this.loadProjects();
     this.loadTeamName();
+    this.loadUserName();
+  }
+
+  loadUserName() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.name || user.email?.split('@')[0] || 'User';
+    }
   }
 
   loadTeamName() {
