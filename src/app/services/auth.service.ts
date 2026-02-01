@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { Router } from '@angular/router'; // הוספנו את הראוטר לניתוב בהתנתקות
+import { Router } from '@angular/router';
+import { apiUrl } from '../config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = `${apiUrl}/auth`;
   private tokenKey = 'auth_token';
 
   // הזרקנו גם את Router כדי שנוכל להעביר את המשתמש לדף ההתחברות כשהוא מתנתק
