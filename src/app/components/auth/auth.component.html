@@ -1,0 +1,55 @@
+<div class="auth-container" dir="ltr">
+  
+  <div class="auth-card">
+    
+    <h2>{{ isLoginMode ? 'Welcome Back! 👋' : 'Create Account ✨' }}</h2>
+    <p class="subtitle">
+      {{ isLoginMode ? 'We are happy to see you again' : 'Join us for smart project management' }}
+    </p>
+
+    @if (errorMessage) {
+      <div class="error-msg">
+        <mat-icon style="vertical-align: bottom; font-size: 18px;">error</mat-icon>
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      
+      @if (!isLoginMode) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="name" placeholder="What's your name?">
+          <mat-icon matSuffix>face</mat-icon>
+        </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="name@example.com">
+        <mat-icon matSuffix>email</mat-icon>
+        @if (authForm.get('email')?.hasError('email')) {
+          <mat-error>Invalid email address</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="******">
+        <mat-icon matSuffix>lock</mat-icon>
+        @if (authForm.get('password')?.hasError('minlength')) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button class="submit-btn" type="submit" [disabled]="!authForm.valid">
+        {{ isLoginMode ? 'Login' : 'Register' }}
+      </button>
+
+      <button type="button" class="toggle-btn" (click)="toggleMode()">
+        {{ isLoginMode ? 'Don\'t have an account? Sign up here' : 'Already have an account? Login' }}
+      </button>
+
+    </form>
+  </div>
+</div>

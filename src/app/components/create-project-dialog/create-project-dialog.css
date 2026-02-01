@@ -1,0 +1,95 @@
+.dialog-wrapper {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  border-bottom: 3px solid #00bcd4; /* קו נקי טורקיז */
+  padding-bottom: 10px;
+  width: fit-content;
+}
+
+.title {
+  color: #333;
+  font-weight: 800;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.rocket { font-size: 1.8rem; }
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+input, select, textarea {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  outline: none;
+  background: #fcfcfc;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #00bcd4;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1);
+}
+
+textarea { resize: none; }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-submit {
+  background: #00bcd4; /* כפתור טורקיז מלא */
+  color: white;
+  border: none;
+  padding: 12px 35px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #00acc1;
+  transform: translateY(-2px);
+}
+
+.btn-submit:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.btn-cancel:hover { color: #333; }

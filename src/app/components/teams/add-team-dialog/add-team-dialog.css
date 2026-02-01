@@ -1,0 +1,16 @@
+.team-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  padding: 10px 0;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+h2[mat-dialog-title] {
+  color: #00bcd4;
+  font-weight: 700;
+}

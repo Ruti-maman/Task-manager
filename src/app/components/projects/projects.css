@@ -1,0 +1,202 @@
+/* --- רקע לבן --- */
+.main-container {
+  padding: 20px 30px;
+  height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: white;
+  padding: 22px 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.header-left { }
+
+.back-btn { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  background: none !important; 
+  border: 2px solid #e0e0e0 !important; 
+  color: #666 !important; 
+  padding: 10px 20px !important; 
+  border-radius: 30px !important; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  text-decoration: none; 
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.back-btn:hover { 
+  border-color: #ff9800 !important; 
+  color: #ff9800 !important;
+  background: rgba(255, 152, 0, 0.05) !important;
+}
+
+.back-btn mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.title-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.title-icon mat-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  color: white;
+}
+
+.title-text h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.title-text .subtitle {
+  margin: 3px 0 0;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* כפתור הוספה */
+.add-btn {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  border-radius: 50px !important;
+  padding: 10px 22px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3) !important;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.add-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 152, 0, 0.4) !important;
+}
+
+.add-btn mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  flex: 1;
+  overflow-y: auto;
+  align-content: start;
+  padding: 5px;
+}
+
+/* --- כרטיס פרויקט --- */
+.project-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* --- צבעים מתחלפים לכרטיסים (אותו סדר כמו בצוותים) --- */
+.project-card:nth-child(3n+1) { border-top: 4px solid #00bcd4; } /* טורקיז */
+.project-card:nth-child(3n+2) { border-top: 4px solid #ff9800; } /* כתום */
+.project-card:nth-child(3n+3) { border-top: 4px solid #4caf50; } /* ירוק */
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+mat-card-header { padding: 20px 20px 0; }
+mat-card-title { font-weight: 700; color: #333; }
+mat-card-subtitle { color: #888; margin-top: 5px; }
+
+/* אייקון תואם צבע (אפור ניטרלי כדי לא להעמיס) */
+.project-avatar {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 45px; height: 45px;
+}
+
+.description {
+  color: #666;
+  line-height: 1.6;
+  padding: 0 20px;
+  margin-top: 15px;
+  flex: 1;
+}
+
+.status-badge {
+  margin: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  background: #f0f0f0;
+  color: #555;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.dot { width: 8px; height: 8px; background: #999; border-radius: 50%; margin-left: 6px; }
+
+.actions { padding: 15px 20px; border-top: 1px solid #f9f9f9; }
+
+/* כפתור כניסה למשימות (חלול עדין) */
+button[mat-stroked-button] {
+  border: 1px solid #ddd !important;
+  color: #555 !important;
+  border-radius: 20px;
+}
+button[mat-stroked-button]:hover {
+  background-color: #333 !important;
+  border-color: #333 !important;
+  color: white !important;
+}
+
+.spacer { flex: 1; }
+.empty-state { grid-column: 1 / -1; text-align: center; padding: 50px; color: #aaa; }

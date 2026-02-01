@@ -1,0 +1,35 @@
+<div dir="rtl" class="dialog-wrapper">
+  <div class="header">
+    <h2 class="title">פרויקט חדש</h2>
+    <span class="rocket">🚀</span>
+  </div>
+  
+  <div class="input-group">
+    <label>שם הפרויקט</label>
+    <input [(ngModel)]="projectName" placeholder="לדוגמה: פיתוח אפליקציה">
+  </div>
+
+  <div class="input-group">
+    <label>תיאור</label>
+    <textarea [(ngModel)]="projectDescription" rows="4" placeholder="ספרי קצת על הפרויקט..."></textarea>
+  </div>
+
+  <div class="input-group">
+    <label>שיוך לצוות</label>
+    <select [(ngModel)]="selectedTeamId">
+      <option [value]="null" disabled selected>בחרי צוות מהרשימה...</option>
+      @for (team of teams; track team.id) {
+        <option [value]="team.id">{{ team.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="actions">
+    <button class="btn-cancel" (click)="close()">ביטול</button>
+    <button class="btn-submit" 
+            [disabled]="!projectName || !selectedTeamId" 
+            (click)="create()">
+      צור פרויקט
+    </button>
+  </div>
+</div>
