@@ -1,50 +1,50 @@
 <div class="teams-container" dir="ltr">
-  <div class="page-header">
-    <div class="header-left">
-      <button class="back-btn" routerLink="/dashboard">
-        <mat-icon>arrow_back</mat-icon>
-        Back to Dashboard
-      </button>
+    <div class="page-header">
+        <div class="header-left">
+            <button class="back-btn" routerLink="/dashboard">
+                <mat-icon>arrow_back</mat-icon>
+                Back to Dashboard
+            </button>
+        </div>
+        <div class="title-section">
+            <div class="title-icon">
+                <mat-icon>groups</mat-icon>
+            </div>
+            <div class="title-text">
+                <h1>My Teams</h1>
+                <p class="subtitle">Manage your teams and members</p>
+            </div>
+        </div>
+        <button class="create-btn" (click)="openCreateTeamDialog()">
+            <mat-icon>add</mat-icon>
+            New Team
+        </button>
     </div>
-    <div class="title-section">
-      <div class="title-icon">
-        <mat-icon>groups</mat-icon>
-      </div>
-      <div class="title-text">
-        <h1>My Teams</h1>
-        <p class="subtitle">Manage your teams and members</p>
-      </div>
-    </div>
-    <button class="create-btn" (click)="openCreateTeamDialog()">
-      <mat-icon>add</mat-icon>
-      New Team
-    </button>
-  </div>
 
-  <div class="teams-grid">
-    @for (team of teams; track team.id) {
-      <div class="team-card">
-        <div class="card-header">
-          <h3 class="team-name">{{ team.name }}</h3>
-          <button class="delete-icon" (click)="deleteTeam(team.id)">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
+    <div class="teams-grid">
+        @for (team of teams; track team.id) {
+        <div class="team-card">
+            <div class="card-header">
+                <h3 class="team-name">{{ team.name }}</h3>
+                <button class="delete-icon" (click)="deleteTeam(team.id)">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </div>
+            <p class="team-desc">{{ team.description || 'No description for this team.' }}</p>
+            <div class="card-footer">
+                <div class="members-count">
+                    <mat-icon>group</mat-icon>
+                    <span>{{ team.members_count || 1 }} Members</span>
+                </div>
+                <a class="open-btn" [routerLink]="['/teams', team.id, 'projects']">Open Projects</a>
+            </div>
         </div>
-        <p class="team-desc">{{ team.description || 'No description for this team.' }}</p>
-        <div class="card-footer">
-          <div class="members-count">
-            <mat-icon>group</mat-icon>
-            <span>{{ team.members_count || 1 }} Members</span>
-          </div>
-          <a class="open-btn" [routerLink]="['/teams', team.id, 'projects']">Open Projects</a>
+        } @empty {
+        <div class="empty-state">
+            <mat-icon class="huge-icon">group_off</mat-icon>
+            <h3>You don't have any teams yet</h3>
+            <p>Click the button above to create your first team!</p>
         </div>
-      </div>
-    } @empty {
-      <div class="empty-state">
-        <mat-icon class="huge-icon">group_off</mat-icon>
-        <h3>You don't have any teams yet</h3>
-        <p>Click the button above to create your first team!</p>
-      </div>
-    }
-  </div>
+        }
+    </div>
 </div>

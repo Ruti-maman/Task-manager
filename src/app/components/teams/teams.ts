@@ -13,15 +13,15 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog'
   standalone: true,
   imports: [CommonModule, RouterModule, MatIconModule, MatDialogModule],
   templateUrl: './teams.html',
-  styleUrls: ['./teams.css']
+  styleUrls: ['./teams.css'],
 })
 export class Teams implements OnInit {
   teams: any[] = [];
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -34,28 +34,30 @@ export class Teams implements OnInit {
         this.teams = res;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error loading teams', err)
+      error: (err) => console.error('Error loading teams', err),
     });
   }
 
   openCreateTeamDialog() {
     const dialogRef = this.dialog.open(AddTeamDialogComponent, {
-      width: '450px'
+      width: '450px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.http.post<any>(`${apiUrl}/teams`, { 
-          name: result.name, 
-          description: result.description 
-        }).subscribe({
-          next: (newTeam) => {
-            // Add the new team directly to the array
-            this.teams = [...this.teams, newTeam];
-            this.cdr.detectChanges();
-          },
-          error: (err) => console.error('Error creating team:', err)
-        });
+        this.http
+          .post<any>(`${apiUrl}/teams`, {
+            name: result.name,
+            description: result.description,
+          })
+          .subscribe({
+            next: (newTeam) => {
+              // Add the new team directly to the array
+              this.teams = [...this.teams, newTeam];
+              this.cdr.detectChanges();
+            },
+            error: (err) => console.error('Error creating team:', err),
+          });
       }
     });
   }
@@ -63,20 +65,20 @@ export class Teams implements OnInit {
   deleteTeam(id: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
-      data: { 
-        title: 'Delete Team', 
-        message: 'Are you sure you want to delete this team?' 
-      }
+      data: {
+        title: 'Delete Team',
+        message: 'Are you sure you want to delete this team?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this.http.delete(`${apiUrl}/teams/${id}`).subscribe({
           next: () => {
-            this.teams = this.teams.filter(t => t.id !== id);
+            this.teams = this.teams.filter((t) => t.id !== id);
             this.cdr.detectChanges();
           },
-          error: (err) => console.error('Error deleting team:', err)
+          error: (err) => console.error('Error deleting team:', err),
         });
       }
     });

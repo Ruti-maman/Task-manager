@@ -1,39 +1,39 @@
 <div class="dashboard-container" dir="ltr">
 
-  <!-- Logout Button -->
-  <button class="logout-btn" (click)="logout()">
-    <mat-icon>logout</mat-icon>
-    Logout
-  </button>
+    <!-- Logout Button -->
+    <button class="logout-btn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+    </button>
 
-  <!-- Center Content -->
-  <div class="center-content">
-    
-    <div class="logo-area">
-      <div class="logo-icon">
-        <mat-icon>rocket_launch</mat-icon>
-      </div>
-      <h1 class="brand-name">Task Manager</h1>
+    <!-- Center Content -->
+    <div class="center-content">
+
+        <div class="logo-area">
+            <div class="logo-icon">
+                <mat-icon>rocket_launch</mat-icon>
+            </div>
+            <h1 class="brand-name">Task Manager</h1>
+        </div>
+
+        <h2 class="welcome-text">Welcome back, {{ userName }}! 👋</h2>
+
+        <p class="about-text">
+            Task Manager is your all-in-one project management solution.
+            Organize teams, manage projects, and track tasks with ease.
+            Built for teams who want to get things done.
+        </p>
+
+        <a class="teams-btn" routerLink="/teams">
+            <mat-icon>groups</mat-icon>
+            Go to My Teams
+        </a>
+
     </div>
 
-    <h2 class="welcome-text">Welcome back, {{ userName }}! 👋</h2>
-    
-    <p class="about-text">
-      Task Manager is your all-in-one project management solution. 
-      Organize teams, manage projects, and track tasks with ease. 
-      Built for teams who want to get things done.
-    </p>
-
-    <a class="teams-btn" routerLink="/teams">
-      <mat-icon>groups</mat-icon>
-      Go to My Teams
-    </a>
-
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <p>© 2026 Task Manager Inc. — Empowering Teams Worldwide</p>
-  </div>
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 Task Manager Inc. — Empowering Teams Worldwide</p>
+    </div>
 
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,14 +15,14 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule, 
-    MatCardModule,    
-    MatButtonModule,  
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './projects.html',
-  styleUrl: './projects.css'
+  styleUrl: './projects.css',
 })
 export class Projects implements OnInit {
   projects: any[] = [];
@@ -30,10 +30,10 @@ export class Projects implements OnInit {
   teamName: string = '';
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private http: HttpClient,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -51,7 +51,7 @@ export class Projects implements OnInit {
             this.teamName = team.name;
             this.cdr.detectChanges();
           }
-        }
+        },
       });
     }
   }
@@ -61,32 +61,32 @@ export class Projects implements OnInit {
       next: (data) => {
         // Filter projects by team
         if (this.teamId) {
-          this.projects = data.filter(p => p.team_id == this.teamId || p.teamId == this.teamId); 
+          this.projects = data.filter((p) => p.team_id == this.teamId || p.teamId == this.teamId);
         } else {
           this.projects = data;
         }
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error fetching projects:', err)
+      error: (err) => console.error('Error fetching projects:', err),
     });
   }
 
   openAddProjectDialog() {
     const dialogRef = this.dialog.open(AddProjectDialogComponent, {
-      width: '400px'
+      width: '400px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const newProject = { ...result, teamId: this.teamId };
-        
+
         this.http.post<any>(`${apiUrl}/projects`, newProject).subscribe({
           next: (createdProject) => {
             // Add immediately to the list
             this.projects = [...this.projects, createdProject];
             this.cdr.detectChanges();
           },
-          error: (err) => console.error('Failed to create project', err)
+          error: (err) => console.error('Failed to create project', err),
         });
       }
     });
@@ -95,20 +95,20 @@ export class Projects implements OnInit {
   deleteProject(projectId: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
-      data: { 
-        title: 'Delete Project', 
-        message: 'Are you sure you want to delete this project?' 
-      }
+      data: {
+        title: 'Delete Project',
+        message: 'Are you sure you want to delete this project?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this.http.delete(`${apiUrl}/projects/${projectId}`).subscribe({
           next: () => {
-            this.projects = this.projects.filter(p => p.id !== projectId);
+            this.projects = this.projects.filter((p) => p.id !== projectId);
             this.cdr.detectChanges();
           },
-          error: (err) => console.error('Error deleting project:', err)
+          error: (err) => console.error('Error deleting project:', err),
         });
       }
     });

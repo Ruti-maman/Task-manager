@@ -9,7 +9,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     // בדיקה: האם מצאנו טוקן?
     console.log('✅ Token found! Attaching to header...');
-    
+
     const cloned = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,

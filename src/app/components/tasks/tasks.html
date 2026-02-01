@@ -1,131 +1,127 @@
 <div class="board-container" dir="ltr">
 
-  <div class="page-header">
-    <div class="header-left">
-      <button class="back-btn" (click)="goBack()">
-        <mat-icon>arrow_back</mat-icon>
-        Back
-      </button>
-    </div>
-    <div class="title-section">
-      <div class="title-icon">
-        <mat-icon>assignment</mat-icon>
-      </div>
-      <div class="title-text">
-        <h1>{{ projectName || 'Project' }} Tasks</h1>
-        <p class="subtitle">Manage and organize your tasks</p>
-      </div>
-    </div>
-    <button class="add-btn" (click)="openAddTaskDialog()">
-      <mat-icon>add</mat-icon>
-      New Task
-    </button>
-  </div>
-
-  <div class="board-columns">
-
-    <div class="task-column col-todo">
-      <div class="column-header">
-        <span>To Do</span>
-        <span class="count-badge">{{ todoTasks.length }}</span>
-      </div>
-      
-      <div class="tasks-list">
-        @for (task of todoTasks; track task.id) {
-          <div class="task-card">
-            <div class="task-header">
-              <span class="task-title">{{ task.title }}</span>
-              <button class="delete-btn" (click)="deleteTask(task.id)">
-                <mat-icon>close</mat-icon>
-              </button>
+    <div class="page-header">
+        <div class="header-left">
+            <button class="back-btn" (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+                Back
+            </button>
+        </div>
+        <div class="title-section">
+            <div class="title-icon">
+                <mat-icon>assignment</mat-icon>
             </div>
-            <p class="task-desc">{{ task.description || 'No description' }}</p>
-            
-            <div class="priority-chip" 
-                 [class.p-high]="task.priority === 'High'"
-                 [class.p-medium]="task.priority === 'Medium'"
-                 [class.p-low]="task.priority === 'Low'">
-              {{ task.priority === 'High' ? 'Urgent' : (task.priority === 'Medium' ? 'Normal' : 'Low') }}
+            <div class="title-text">
+                <h1>{{ projectName || 'Project' }} Tasks</h1>
+                <p class="subtitle">Manage and organize your tasks</p>
             </div>
-            
-            <div class="task-actions">
-              <button class="move-btn" (click)="updateTaskStatus(task, 'in-progress')">
-                Move to Progress →
-              </button>
-            </div>
-          </div>
-        } @empty {
-          <div class="empty-placeholder">No tasks to do</div>
-        }
-      </div>
+        </div>
+        <button class="add-btn" (click)="openAddTaskDialog()">
+            <mat-icon>add</mat-icon>
+            New Task
+        </button>
     </div>
 
-    <div class="task-column col-inprogress">
-      <div class="column-header">
-        <span>In Progress</span>
-        <span class="count-badge">{{ inProgressTasks.length }}</span>
-      </div>
+    <div class="board-columns">
 
-      <div class="tasks-list">
-        @for (task of inProgressTasks; track task.id) {
-          <div class="task-card">
-            <div class="task-header">
-              <span class="task-title">{{ task.title }}</span>
-              <button class="delete-btn" (click)="deleteTask(task.id)">
-                <mat-icon>close</mat-icon>
-              </button>
+        <div class="task-column col-todo">
+            <div class="column-header">
+                <span>To Do</span>
+                <span class="count-badge">{{ todoTasks.length }}</span>
             </div>
-            <p class="task-desc">{{ task.description || 'No description' }}</p>
-            <div class="priority-chip" 
-                 [class.p-high]="task.priority === 'High'"
-                 [class.p-medium]="task.priority === 'Medium'"
-                 [class.p-low]="task.priority === 'Low'">
-              {{ task.priority === 'High' ? 'Urgent' : (task.priority === 'Medium' ? 'Normal' : 'Low') }}
+
+            <div class="tasks-list">
+                @for (task of todoTasks; track task.id) {
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-title">{{ task.title }}</span>
+                        <button class="delete-btn" (click)="deleteTask(task.id)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <p class="task-desc">{{ task.description || 'No description' }}</p>
+
+                    <div class="priority-chip" [class.p-high]="task.priority === 'High'"
+                        [class.p-medium]="task.priority === 'Medium'" [class.p-low]="task.priority === 'Low'">
+                        {{ task.priority === 'High' ? 'Urgent' : (task.priority === 'Medium' ? 'Normal' : 'Low') }}
+                    </div>
+
+                    <div class="task-actions">
+                        <button class="move-btn" (click)="updateTaskStatus(task, 'in-progress')">
+                            Move to Progress →
+                        </button>
+                    </div>
+                </div>
+                } @empty {
+                <div class="empty-placeholder">No tasks to do</div>
+                }
             </div>
-            
-            <div class="task-actions">
-              <button class="move-btn back" (click)="updateTaskStatus(task, 'todo')">
-                ← Back
-              </button>
-              <button class="move-btn" (click)="updateTaskStatus(task, 'done')">
-                Done ✓
-              </button>
+        </div>
+
+        <div class="task-column col-inprogress">
+            <div class="column-header">
+                <span>In Progress</span>
+                <span class="count-badge">{{ inProgressTasks.length }}</span>
             </div>
-          </div>
-        } @empty {
-          <div class="empty-placeholder">Empty for now</div>
-        }
-      </div>
+
+            <div class="tasks-list">
+                @for (task of inProgressTasks; track task.id) {
+                <div class="task-card">
+                    <div class="task-header">
+                        <span class="task-title">{{ task.title }}</span>
+                        <button class="delete-btn" (click)="deleteTask(task.id)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <p class="task-desc">{{ task.description || 'No description' }}</p>
+                    <div class="priority-chip" [class.p-high]="task.priority === 'High'"
+                        [class.p-medium]="task.priority === 'Medium'" [class.p-low]="task.priority === 'Low'">
+                        {{ task.priority === 'High' ? 'Urgent' : (task.priority === 'Medium' ? 'Normal' : 'Low') }}
+                    </div>
+
+                    <div class="task-actions">
+                        <button class="move-btn back" (click)="updateTaskStatus(task, 'todo')">
+                            ← Back
+                        </button>
+                        <button class="move-btn" (click)="updateTaskStatus(task, 'done')">
+                            Done ✓
+                        </button>
+                    </div>
+                </div>
+                } @empty {
+                <div class="empty-placeholder">Empty for now</div>
+                }
+            </div>
+        </div>
+
+        <div class="task-column col-done">
+            <div class="column-header">
+                <span>Done</span>
+                <span class="count-badge">{{ doneTasks.length }}</span>
+            </div>
+
+            <div class="tasks-list">
+                @for (task of doneTasks; track task.id) {
+                <div class="task-card done-card">
+                    <div class="task-header">
+                        <span class="task-title">{{ task.title }}</span>
+                        <button class="delete-btn" (click)="deleteTask(task.id)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <div class="priority-chip p-low">Completed ✅</div>
+
+                    <div class="task-actions">
+                        <button class="move-btn back" (click)="updateTaskStatus(task, 'in-progress')">
+                            ← Move to Progress
+                        </button>
+                    </div>
+                </div>
+                } @empty {
+                <div class="empty-placeholder">No completed tasks yet</div>
+                }
+            </div>
+        </div>
+
     </div>
-
-    <div class="task-column col-done">
-      <div class="column-header">
-        <span>Done</span>
-        <span class="count-badge">{{ doneTasks.length }}</span>
-      </div>
-
-      <div class="tasks-list">
-        @for (task of doneTasks; track task.id) {
-          <div class="task-card done-card">
-            <div class="task-header">
-              <span class="task-title">{{ task.title }}</span>
-              <button class="delete-btn" (click)="deleteTask(task.id)">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-            <div class="priority-chip p-low">Completed ✅</div>
-            
-            <div class="task-actions">
-              <button class="move-btn back" (click)="updateTaskStatus(task, 'in-progress')">
-                ← Move to Progress
-              </button>
-            </div>
-          </div>
-        } @empty {
-          <div class="empty-placeholder">No completed tasks yet</div>
-        }
-      </div>
-    </div>
-
-  </div>
 </div>

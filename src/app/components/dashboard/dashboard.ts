@@ -10,14 +10,14 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css']
+  styleUrls: ['./dashboard.css'],
 })
 export class DashboardComponent implements OnInit {
   userName: string = 'User';
 
   constructor(
-    private router: Router, 
-    private authService: AuthService
+    private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {

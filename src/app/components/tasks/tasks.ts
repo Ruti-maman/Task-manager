@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog'
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatDialogModule],
   templateUrl: './tasks.html',
-  styleUrls: ['./tasks.css']
+  styleUrls: ['./tasks.css'],
 })
 export class Tasks implements OnInit {
   todoTasks: any[] = [];
@@ -25,11 +25,11 @@ export class Tasks implements OnInit {
   allProjects: any[] = [];
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private http: HttpClient,
     private location: Location,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -55,41 +55,39 @@ export class Tasks implements OnInit {
           }
         }
       },
-      error: (err) => console.error('Error loading projects:', err)
+      error: (err) => console.error('Error loading projects:', err),
     });
   }
 
   loadTasks() {
-    const url = this.projectId 
-      ? `${apiUrl}/tasks?projectId=${this.projectId}` 
-      : `${apiUrl}/tasks`;
-      
+    const url = this.projectId ? `${apiUrl}/tasks?projectId=${this.projectId}` : `${apiUrl}/tasks`;
+
     this.http.get<any[]>(url).subscribe({
       next: (tasks) => {
-        this.todoTasks = tasks.filter(t => t.status === 'todo');
-        this.inProgressTasks = tasks.filter(t => t.status === 'in-progress');
-        this.doneTasks = tasks.filter(t => t.status === 'done');
+        this.todoTasks = tasks.filter((t) => t.status === 'todo');
+        this.inProgressTasks = tasks.filter((t) => t.status === 'in-progress');
+        this.doneTasks = tasks.filter((t) => t.status === 'done');
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error loading tasks:', err)
+      error: (err) => console.error('Error loading tasks:', err),
     });
   }
 
   openAddTaskDialog() {
     const dialogRef = this.dialog.open(AddTaskDialogComponent, {
       width: '400px',
-      data: { projectId: this.projectId, projects: this.allProjects }
+      data: { projectId: this.projectId, projects: this.allProjects },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const taskProjectId = this.projectId || result.projectId;
-        const newTask = { 
+        const newTask = {
           title: result.title,
           description: result.description,
           priority: result.priority,
           status: result.status || 'todo',
-          projectId: Number(taskProjectId)
+          projectId: Number(taskProjectId),
         };
         this.http.post<any>(`${apiUrl}/tasks`, newTask).subscribe({
           next: (createdTask) => {
@@ -103,7 +101,7 @@ export class Tasks implements OnInit {
             }
             this.cdr.detectChanges();
           },
-          error: (err) => console.error('Error creating task:', err)
+          error: (err) => console.error('Error creating task:', err),
         });
       }
     });
@@ -111,10 +109,10 @@ export class Tasks implements OnInit {
 
   updateTaskStatus(task: any, newStatus: string) {
     // Remove from current list immediately
-    this.todoTasks = this.todoTasks.filter(t => t.id !== task.id);
-    this.inProgressTasks = this.inProgressTasks.filter(t => t.id !== task.id);
-    this.doneTasks = this.doneTasks.filter(t => t.id !== task.id);
-    
+    this.todoTasks = this.todoTasks.filter((t) => t.id !== task.id);
+    this.inProgressTasks = this.inProgressTasks.filter((t) => t.id !== task.id);
+    this.doneTasks = this.doneTasks.filter((t) => t.id !== task.id);
+
     // Add to new list
     const updatedTask = { ...task, status: newStatus };
     if (newStatus === 'todo') {
@@ -125,32 +123,32 @@ export class Tasks implements OnInit {
       this.doneTasks = [...this.doneTasks, updatedTask];
     }
     this.cdr.detectChanges();
-    
+
     // Update on server
     this.http.patch(`${apiUrl}/tasks/${task.id}`, { status: newStatus }).subscribe({
-      error: (err) => console.error('Error updating task:', err)
+      error: (err) => console.error('Error updating task:', err),
     });
   }
 
   deleteTask(taskId: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
-      data: { 
-        title: 'Delete Task', 
-        message: 'Are you sure you want to delete this task?' 
-      }
+      data: {
+        title: 'Delete Task',
+        message: 'Are you sure you want to delete this task?',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(confirmed => {
+    dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this.http.delete(`${apiUrl}/tasks/${taskId}`).subscribe({
           next: () => {
-            this.todoTasks = this.todoTasks.filter(t => t.id !== taskId);
-            this.inProgressTasks = this.inProgressTasks.filter(t => t.id !== taskId);
-            this.doneTasks = this.doneTasks.filter(t => t.id !== taskId);
+            this.todoTasks = this.todoTasks.filter((t) => t.id !== taskId);
+            this.inProgressTasks = this.inProgressTasks.filter((t) => t.id !== taskId);
+            this.doneTasks = this.doneTasks.filter((t) => t.id !== taskId);
             this.cdr.detectChanges();
           },
-          error: (err) => console.error('Error deleting task:', err)
+          error: (err) => console.error('Error deleting task:', err),
         });
       }
     });

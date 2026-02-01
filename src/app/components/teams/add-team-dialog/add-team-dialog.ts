@@ -15,21 +15,21 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './add-team-dialog.html',
-  styleUrls: ['./add-team-dialog.css']
+  styleUrls: ['./add-team-dialog.css'],
 })
 export class AddTeamDialogComponent {
   teamForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<AddTeamDialogComponent>
+    private dialogRef: MatDialogRef<AddTeamDialogComponent>,
   ) {
     this.teamForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['']
+      description: [''],
     });
   }
 

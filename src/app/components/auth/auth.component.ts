@@ -78,7 +78,7 @@ export class AuthComponent {
 
         // --- הנה השינוי החשוב: ---
         // במקום לנווט ל-teams, אנחנו מנווטים ל-dashboard
-        this.router.navigate(['/dashboard']); 
+        this.router.navigate(['/dashboard']);
         // ------------------------
       },
       error: (err) => {
