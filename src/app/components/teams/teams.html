@@ -1,10 +1,4 @@
 <div class="teams-container" dir="ltr">
-    <!-- Logout Button -->
-    <button class="logout-btn" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Logout
-    </button>
-
     <div class="page-header">
         <div class="header-left">
             <button class="back-btn" routerLink="/dashboard">
@@ -21,10 +15,16 @@
                 <p class="subtitle">Manage your teams and members</p>
             </div>
         </div>
-        <button class="create-btn" (click)="openCreateTeamDialog()">
-            <mat-icon>add</mat-icon>
-            New Team
-        </button>
+        <div class="header-actions">
+            <button class="create-btn" (click)="openCreateTeamDialog()">
+                <mat-icon>add</mat-icon>
+                New Team
+            </button>
+            <button class="logout-btn" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </div>
     </div>
 
     <div class="teams-grid">

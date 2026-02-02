@@ -1,11 +1,5 @@
 <div class="main-container" dir="ltr">
 
-    <!-- Logout Button -->
-    <button class="logout-btn" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Logout
-    </button>
-
     <div class="page-header">
         <div class="header-left">
             <button mat-button class="back-btn" routerLink="/teams">
@@ -22,10 +16,16 @@
                 <p class="subtitle">{{ teamName || 'Team' }} - Manage projects</p>
             </div>
         </div>
-        <button mat-raised-button class="add-btn" (click)="openAddProjectDialog()">
-            <mat-icon>add</mat-icon>
-            Create Project
-        </button>
+        <div class="header-actions">
+            <button mat-raised-button class="add-btn" (click)="openAddProjectDialog()">
+                <mat-icon>add</mat-icon>
+                Create Project
+            </button>
+            <button class="logout-btn" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </div>
     </div>
 
     <div class="projects-grid">

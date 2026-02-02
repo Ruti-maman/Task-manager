@@ -8,13 +8,15 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    position: relative;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
 .logout-btn {
-    position: absolute;
-    top: 30px;
-    right: 30px;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -28,7 +30,6 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 3px 10px rgba(255, 82, 82, 0.3);
-    z-index: 100;
 }
 
 .logout-btn:hover {

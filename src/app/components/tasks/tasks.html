@@ -1,11 +1,5 @@
 <div class="board-container" dir="ltr">
 
-    <!-- Logout Button -->
-    <button class="logout-btn" (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Logout
-    </button>
-
     <div class="page-header">
         <div class="header-left">
             <button class="back-btn" (click)="goBack()">
@@ -22,10 +16,16 @@
                 <p class="subtitle">{{ projectName || 'Project' }} - Manage tasks</p>
             </div>
         </div>
-        <button class="add-btn" (click)="openAddTaskDialog()">
-            <mat-icon>add</mat-icon>
-            New Task
-        </button>
+        <div class="header-actions">
+            <button class="add-btn" (click)="openAddTaskDialog()">
+                <mat-icon>add</mat-icon>
+                New Task
+            </button>
+            <button class="logout-btn" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </div>
     </div>
 
     <div class="board-columns">

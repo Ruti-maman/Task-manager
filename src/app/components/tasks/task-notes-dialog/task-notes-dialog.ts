@@ -156,10 +156,22 @@ import { CommentsService } from '../../../services/comments.service';
       background: white;
       margin: 0 -24px -24px;
       border-radius: 0 0 4px 4px;
+      overflow: hidden;
     }
 
     .notes-list {
       margin-bottom: 20px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .notes-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .notes-list {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
     .empty-notes {
