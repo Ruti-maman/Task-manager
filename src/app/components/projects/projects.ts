@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +35,14 @@ export class Projects implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
+
+  logout() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/auth']);
+  }
 
   ngOnInit() {
     this.teamId = this.route.snapshot.paramMap.get('teamId') || '';

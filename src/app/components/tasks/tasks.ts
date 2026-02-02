@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,7 +32,14 @@ export class Tasks implements OnInit {
     private http: HttpClient,
     private location: Location,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
+
+  logout() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/auth']);
+  }
 
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('projectId') || '';

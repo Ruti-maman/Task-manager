@@ -25,7 +25,7 @@ import { CommentsService } from '../../../services/comments.service';
       <div class="dialog-header">
         <div class="header-info">
           <div class="header-icon">
-            <mat-icon>edit_note</mat-icon>
+            <mat-icon>sticky_note_2</mat-icon>
           </div>
           <div class="header-text">
             <h2>Task Notes</h2>
@@ -42,42 +42,36 @@ import { CommentsService } from '../../../services/comments.service';
           @if (comments.length === 0) {
             <div class="empty-notes">
               <div class="empty-icon">
-                <mat-icon>speaker_notes_off</mat-icon>
+                <mat-icon>note_add</mat-icon>
               </div>
               <h3>No notes yet</h3>
-              <p>Start the conversation by adding your first note!</p>
+              <p>Add your first note below!</p>
             </div>
           }
           @for (comment of comments; track comment.id) {
             <div class="note-item">
-              <div class="note-avatar">
-                <mat-icon>person</mat-icon>
-              </div>
-              <div class="note-bubble">
-                <div class="note-content">{{ comment.body }}</div>
-                <div class="note-meta">
-                  <span class="note-author">{{ comment.author_name || 'You' }}</span>
-                  <span class="note-dot">•</span>
-                  <span class="note-date">{{ formatDate(comment.created_at) }}</span>
-                </div>
+              <div class="note-content">{{ comment.body }}</div>
+              <div class="note-meta">
+                <span class="note-author">{{ comment.author_name || 'You' }}</span>
+                <span class="note-dot">•</span>
+                <span class="note-date">{{ formatDate(comment.created_at) }}</span>
               </div>
             </div>
           }
         </div>
 
         <div class="add-note-section">
-          <div class="input-wrapper">
-            <input 
-              type="text" 
-              [(ngModel)]="newNote" 
-              placeholder="Write a note..." 
-              class="note-text-input"
-              (keyup.enter)="addNote()"
-            />
-            <button class="send-btn" (click)="addNote()" [disabled]="!newNote.trim()">
-              <mat-icon>send</mat-icon>
-            </button>
-          </div>
+          <input 
+            type="text" 
+            [(ngModel)]="newNote" 
+            placeholder="Write a note..." 
+            class="note-input"
+            (keyup.enter)="addNote()"
+          />
+          <button class="add-btn" (click)="addNote()" [disabled]="!newNote.trim()">
+            <mat-icon>send</mat-icon>
+            Add Note
+          </button>
         </div>
       </div>
     </div>
@@ -85,18 +79,16 @@ import { CommentsService } from '../../../services/comments.service';
   styles: [`
     .notes-dialog {
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-width: 400px;
-      max-width: 500px;
+      min-width: 380px;
+      max-width: 450px;
     }
 
     .dialog-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #4caf50 0%, #43a047 100%);
       color: white;
       margin: -24px -24px 0;
       border-radius: 4px 4px 0 0;
@@ -105,42 +97,42 @@ import { CommentsService } from '../../../services/comments.service';
     .header-info {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
     .header-icon {
-      width: 48px;
-      height: 48px;
+      width: 42px;
+      height: 42px;
       background: rgba(255,255,255,0.2);
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .header-icon mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
     }
 
     .header-text h2 {
       margin: 0;
-      font-size: 1.3rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 600;
     }
 
     .task-name {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       opacity: 0.9;
     }
 
     .close-btn {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.2);
       border: none;
       color: white;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -150,171 +142,148 @@ import { CommentsService } from '../../../services/comments.service';
     }
 
     .close-btn:hover {
-      background: rgba(255,255,255,0.25);
-      transform: rotate(90deg);
+      background: rgba(255,255,255,0.3);
+    }
+
+    .close-btn mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
     }
 
     .dialog-body {
-      padding: 20px 24px;
-      background: #f8f9fc;
+      padding: 20px 24px 24px;
+      background: white;
       margin: 0 -24px -24px;
       border-radius: 0 0 4px 4px;
     }
 
     .notes-list {
-      min-height: 120px;
-      max-height: 280px;
-      overflow-y: auto;
       margin-bottom: 20px;
     }
 
     .empty-notes {
       text-align: center;
-      padding: 40px 20px;
+      padding: 30px 20px;
     }
 
     .empty-icon {
-      width: 70px;
-      height: 70px;
-      background: linear-gradient(135deg, #e0e5ec 0%, #d0d5dc 100%);
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 15px;
+      margin: 0 auto 12px;
     }
 
     .empty-icon mat-icon {
-      font-size: 35px;
-      width: 35px;
-      height: 35px;
-      color: #a0a5b0;
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+      color: #4caf50;
     }
 
     .empty-notes h3 {
-      margin: 0 0 8px;
-      color: #555;
+      margin: 0 0 6px;
+      color: #333;
       font-weight: 600;
+      font-size: 1rem;
     }
 
     .empty-notes p {
       margin: 0;
-      color: #999;
-      font-size: 0.9rem;
+      color: #888;
+      font-size: 0.85rem;
     }
 
     .note-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
-    .note-avatar {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .note-avatar mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      color: white;
-    }
-
-    .note-bubble {
-      flex: 1;
-      background: white;
       padding: 12px 16px;
-      border-radius: 0 16px 16px 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      background: #f5f5f5;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border-left: 3px solid #4caf50;
     }
 
     .note-content {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #333;
-      line-height: 1.5;
-      margin-bottom: 8px;
+      line-height: 1.4;
+      margin-bottom: 6px;
     }
 
     .note-meta {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #999;
     }
 
     .note-author {
       font-weight: 600;
-      color: #667eea;
+      color: #4caf50;
     }
 
     .note-dot {
-      font-size: 8px;
+      font-size: 6px;
     }
 
     .add-note-section {
-      padding-top: 15px;
-      border-top: 1px solid #e5e8f0;
-    }
-
-    .input-wrapper {
       display: flex;
       gap: 10px;
       align-items: center;
-      background: white;
-      border-radius: 30px;
-      padding: 6px 6px 6px 20px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
 
-    .note-text-input {
+    .note-input {
       flex: 1;
-      border: none;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      padding: 12px 18px;
+      font-size: 0.9rem;
       outline: none;
-      font-size: 0.95rem;
-      color: #333;
-      background: transparent;
+      transition: border-color 0.3s;
     }
 
-    .note-text-input::placeholder {
-      color: #aaa;
+    .note-input:focus {
+      border-color: #4caf50;
     }
 
-    .send-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      cursor: pointer;
+    .note-input::placeholder {
+      color: #bbb;
+    }
+
+    .add-btn {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #4caf50 0%, #43a047 100%);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
       transition: all 0.3s;
+      white-space: nowrap;
     }
 
-    .send-btn:hover:not(:disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    .add-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
     }
 
-    .send-btn:disabled {
-      opacity: 0.4;
+    .add-btn:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
-    .send-btn mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+    .add-btn mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
     }
   `]
 })

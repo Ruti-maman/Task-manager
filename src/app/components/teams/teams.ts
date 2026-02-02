@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { apiUrl } from '../../config';
@@ -23,7 +23,14 @@ export class Teams implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
+
+  logout() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/auth']);
+  }
 
   ngOnInit() {
     this.loadTeams();
