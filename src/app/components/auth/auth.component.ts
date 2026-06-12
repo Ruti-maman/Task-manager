@@ -82,7 +82,8 @@ export class AuthComponent {
         // ------------------------
       },
       error: (err) => {
-        // ... (קוד טיפול בשגיאות נשאר אותו דבר)
+        console.error('Auth error:', err);
+        this.errorMessage = err?.error?.message || 'Authentication failed. Please try again.';
       },
     });
   }
