@@ -27,8 +27,25 @@ jobs:
       - name: Install
         run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
-      # Pages serves this app from /Task-manager/, not from the domain root,
-      # so the base href has to say so or every asset 404s.
+      # The app reaches a separate REST API - through proxy.conf.json in dev,
+      # through the hosted URL in src/app/config.ts otherwise. Pages serves
+      # static files only, so without a stand-in every screen stops at login.
+      # This interceptor answers those same calls from the browser and keeps
+      # its data in localStorage, so the demo behaves like the real thing.
+      # See demo/README.md.
+      - name: Add the browser-side demo backend
+        run: |
+          cp demo/demo-backend.interceptor.ts src/app/demo-backend.interceptor.ts
+          grep -q "demoBackendInterceptor" src/app/demo-backend.interceptor.ts
+
+      # Registering it means touching the HttpClient provider chain, so this
+      # config is a copy of the original with the demo interceptor appended -
+      # every other provider stays exactly as she wrote it.
+      - name: Register it in the app config
+        run: |
+          cp demo/app.config.demo.ts src/app/app.config.ts
+          grep -q "demoBackendInterceptor" src/app/app.config.ts
+
       - name: Build
         run: npx ng build --base-href=/Task-manager/
 
@@ -40,12 +57,13 @@ jobs:
           done
           test -n "$(grep '^dir=' "$GITHUB_OUTPUT" || true)" || { echo "no build output"; ls -R dist; exit 1; }
 
+      # Angular's router uses the HTML5 history API, so a deep link like
+      # /Task-manager/teams is a real URL to Pages, which has no such file.
+      # Serving index.html as 404.html hands those URLs back to the router.
       - name: Prepare for Pages
         run: |
           d="${{ steps.out.outputs.dir }}"
           touch "$d/.nojekyll"
-          # Angular routes are client-side; Pages needs a 404 fallback to serve
-          # index.html for deep links like /Task-manager/dashboard.
           cp "$d/index.html" "$d/404.html"
 
       - uses: actions/configure-pages@v5
