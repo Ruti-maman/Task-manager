@@ -1,0 +1,64 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      # Pages serves this app from /Task-manager/, not from the domain root,
+      # so the base href has to say so or every asset 404s.
+      - name: Build
+        run: npx ng build --base-href=/Task-manager/
+
+      - name: Locate build output
+        id: out
+        run: |
+          for d in dist/task-manager/browser dist/task-manager dist/browser; do
+            if [ -f "$d/index.html" ]; then echo "dir=$d" >> "$GITHUB_OUTPUT"; break; fi
+          done
+          test -n "$(grep '^dir=' "$GITHUB_OUTPUT" || true)" || { echo "no build output"; ls -R dist; exit 1; }
+
+      - name: Prepare for Pages
+        run: |
+          d="${{ steps.out.outputs.dir }}"
+          touch "$d/.nojekyll"
+          # Angular routes are client-side; Pages needs a 404 fallback to serve
+          # index.html for deep links like /Task-manager/dashboard.
+          cp "$d/index.html" "$d/404.html"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.out.outputs.dir }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
