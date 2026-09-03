@@ -13,9 +13,15 @@
  * Type `__resetDemo()` in the browser console to wipe the store and reseed.
  */
 
-import { HttpEvent, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
+import { Observable, of, throwError, timer } from 'rxjs';
+import { delay, mergeMap } from 'rxjs/operators';
 
 declare global {
   interface Window {
@@ -56,6 +62,7 @@ interface DemoUser {
   name: string;
   email: string;
   created_at: string;
+  passHash?: string;
 }
 
 interface DemoTeam {
@@ -341,6 +348,7 @@ function seedFor(email: string): DemoDb {
     created_at: daysAgo(150),
   };
   if (email.toLowerCase() === SHOWCASE_EMAIL) {
+    owner.passHash = passHash(SHOWCASE_PASSWORD);
     const fresh = seed();
     fresh.users = [owner];
     return fresh;
@@ -377,6 +385,39 @@ function ok(body: unknown, status = 200): Observable<HttpEvent<unknown>> {
   const wait = 120 + Math.floor(Math.random() * 130);
   return of(new HttpResponse<unknown>({ status, body })).pipe(delay(wait));
 }
+
+/** A real HTTP error, so the app's error paths run exactly as in production. */
+function fail(status: number, message: string): Observable<HttpEvent<unknown>> {
+  const wait = 120 + Math.floor(Math.random() * 130);
+  return timer(wait).pipe(
+    mergeMap(() =>
+      throwError(() => new HttpErrorResponse({ status, error: { message, error: message } })),
+    ),
+  );
+}
+
+/**
+ * djb2, not crypto: this store lives in the visitor's own browser, so there is
+ * nothing to protect from anyone but themselves - what matters is the
+ * BEHAVIOUR: the password you registered with is the only one that signs in.
+ */
+function passHash(password: string): string {
+  let h = 5381;
+  for (let i = 0; i < password.length; i++) {
+    h = ((h << 5) + h + password.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(16);
+}
+
+function storeExists(email: string): boolean {
+  try {
+    return localStorage.getItem(keyFor(email)) !== null;
+  } catch {
+    return false;
+  }
+}
+
+const SHOWCASE_PASSWORD = 'demo1234';
 
 function num(value: unknown): number {
   return Number(value);
@@ -467,9 +508,25 @@ export const demoBackendInterceptor: HttpInterceptorFn = (
     // Any credentials are accepted: a portfolio visitor should never be
     // stopped at the gate by a password only the author knows.
     if (first === 'login' && method === 'POST') {
-      const email = text(body.email, 'demo@taskmanager.dev');
+      const email = text(body.email, '');
+      const password = text(body.password, '');
+      const isShowcase = email.toLowerCase() === SHOWCASE_EMAIL;
+      if (!isShowcase && !storeExists(email)) {
+        return fail(401, 'החשבון לא קיים - הירשמו קודם (Sign up)');
+      }
       const store = loadFor(email);
       const user = store.users[0];
+      if (user.passHash === undefined) {
+        // accounts from before passwords existed adopt the first one offered
+        user.passHash = passHash(password);
+        try {
+          localStorage.setItem(keyFor(email), JSON.stringify(store));
+        } catch {
+          // private mode
+        }
+      } else if (user.passHash !== passHash(password)) {
+        return fail(401, 'סיסמה שגויה');
+      }
       // the cache currently belongs to whoever was signed in before
       cache = null;
       cacheKey = '';
@@ -477,10 +534,17 @@ export const demoBackendInterceptor: HttpInterceptorFn = (
     }
 
     if (first === 'register' && method === 'POST') {
-      const email = text(body.email, 'demo@taskmanager.dev');
+      const email = text(body.email, '');
+      if (!email) {
+        return fail(400, 'name, email, password required');
+      }
+      if (storeExists(email) || email.toLowerCase() === SHOWCASE_EMAIL) {
+        return fail(409, 'האימייל כבר רשום - נסו להתחבר');
+      }
       const store = loadFor(email);
       const user = store.users[0];
       user.name = text(body.name, user.name);
+      user.passHash = passHash(text(body.password, ''));
       try {
         localStorage.setItem(keyFor(email), JSON.stringify(store));
       } catch {
