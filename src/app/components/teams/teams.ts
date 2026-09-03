@@ -29,7 +29,7 @@ export class Teams implements OnInit {
   logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
   }
 
   ngOnInit() {
@@ -73,7 +73,10 @@ export class Teams implements OnInit {
               this.teams = [...this.teams, newTeam];
               this.cdr.detectChanges();
             },
-            error: (err) => console.error('Error creating team:', err),
+            error: (err) => {
+              console.error('Error creating team:', err);
+              alert(err?.error?.error || 'Creating the team failed - is the server running?');
+            },
           });
       }
     });

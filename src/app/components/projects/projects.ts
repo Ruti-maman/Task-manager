@@ -41,7 +41,7 @@ export class Projects implements OnInit {
   logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
   }
 
   ngOnInit() {

@@ -22,6 +22,7 @@ export class Tasks implements OnInit {
   inProgressTasks: any[] = [];
   doneTasks: any[] = [];
   projectId: string = '';
+  teamId: string = '';
   projectName: string = '';
   allProjects: any[] = [];
   userName: string = 'User';
@@ -38,11 +39,12 @@ export class Tasks implements OnInit {
   logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
   }
 
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('projectId') || '';
+    this.teamId = this.route.snapshot.paramMap.get('teamId') || '';
     this.loadTasks();
     this.loadProjects();
     this.loadUserName();
@@ -57,7 +59,13 @@ export class Tasks implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    // an explicit route, like the other screens' back buttons - history.back()
+    // depends on how you arrived and can leave the app entirely
+    if (this.teamId) {
+      this.router.navigate(['/teams', this.teamId, 'projects']);
+    } else {
+      this.router.navigate(['/teams']);
+    }
   }
 
   loadProjects() {
