@@ -323,18 +323,29 @@ function emailOfKey(key: string): string {
   return key.slice(DB_PREFIX.length + 2) || 'guest';
 }
 
-/** A fresh store whose owner is the person who just signed in. */
+/**
+ * A fresh store whose owner is the person who just signed in.
+ *
+ * Only the showcase account gets the pre-filled sample board. Everyone else
+ * starts EMPTY - a new visitor creating an account expects a new workspace,
+ * and handing every email the same seeded board read as "all clients see the
+ * same tasks", which is exactly the impression a portfolio must not give.
+ */
+const SHOWCASE_EMAIL = 'demo@taskmanager.dev';
+
 function seedFor(email: string): DemoDb {
-  const fresh = seed();
-  fresh.users = [
-    {
-      id: 1,
-      name: email.split('@')[0] || 'Demo User',
-      email,
-      created_at: daysAgo(150),
-    },
-  ];
-  return fresh;
+  const owner: DemoUser = {
+    id: 1,
+    name: email.split('@')[0] || 'Demo User',
+    email,
+    created_at: daysAgo(150),
+  };
+  if (email.toLowerCase() === SHOWCASE_EMAIL) {
+    const fresh = seed();
+    fresh.users = [owner];
+    return fresh;
+  }
+  return { seq: 1000, users: [owner], teams: [], projects: [], tasks: [], comments: [] };
 }
 
 function loadFor(email: string): DemoDb {
