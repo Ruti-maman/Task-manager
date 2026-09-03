@@ -23,7 +23,31 @@ declare global {
   }
 }
 
-const DB_KEY = 'taskman-demo-db';
+const DB_PREFIX = 'taskman-demo-db';
+
+/**
+ * Every signed-in email gets its own store. Without this, two visitors (or
+ * one visitor trying two accounts) share a single board - which reads as
+ * "the app doesn't separate clients", the opposite of what the real API does.
+ */
+function keyFor(email: string): string {
+  return `${DB_PREFIX}::${email.toLowerCase()}`;
+}
+
+function currentKey(): string {
+  try {
+    const raw = localStorage.getItem('user');
+    if (raw) {
+      const parsedUser = JSON.parse(raw) as Partial<DemoUser>;
+      if (parsedUser.email) {
+        return keyFor(parsedUser.email);
+      }
+    }
+  } catch {
+    // fall through to the guest store
+  }
+  return keyFor('guest');
+}
 
 /* ------------------------------------------------------------------ types */
 
@@ -263,13 +287,16 @@ function c(
 /* ------------------------------------------------------------- persistence */
 
 let cache: DemoDb | null = null;
+let cacheKey = '';
 
 function load(): DemoDb {
-  if (cache) {
+  const key = currentKey();
+  if (cache && cacheKey === key) {
     return cache;
   }
+  cacheKey = key;
   try {
-    const raw = localStorage.getItem(DB_KEY);
+    const raw = localStorage.getItem(key);
     if (raw) {
       cache = JSON.parse(raw) as DemoDb;
       return cache;
@@ -277,18 +304,55 @@ function load(): DemoDb {
   } catch {
     // A blocked or corrupted localStorage just means we start from the seed.
   }
-  cache = seed();
+  cache = seedFor(emailOfKey(key));
   save(cache);
   return cache;
 }
 
 function save(db: DemoDb): void {
   cache = db;
+  cacheKey = currentKey();
   try {
-    localStorage.setItem(DB_KEY, JSON.stringify(db));
+    localStorage.setItem(cacheKey, JSON.stringify(db));
   } catch {
     // Private-mode browsers still get a working demo, just not across refreshes.
   }
+}
+
+function emailOfKey(key: string): string {
+  return key.slice(DB_PREFIX.length + 2) || 'guest';
+}
+
+/** A fresh store whose owner is the person who just signed in. */
+function seedFor(email: string): DemoDb {
+  const fresh = seed();
+  fresh.users = [
+    {
+      id: 1,
+      name: email.split('@')[0] || 'Demo User',
+      email,
+      created_at: daysAgo(150),
+    },
+  ];
+  return fresh;
+}
+
+function loadFor(email: string): DemoDb {
+  try {
+    const raw = localStorage.getItem(keyFor(email));
+    if (raw) {
+      return JSON.parse(raw) as DemoDb;
+    }
+  } catch {
+    // start fresh below
+  }
+  const fresh = seedFor(email);
+  try {
+    localStorage.setItem(keyFor(email), JSON.stringify(fresh));
+  } catch {
+    // private mode: in-memory only
+  }
+  return fresh;
 }
 
 function nextId(db: DemoDb): number {
@@ -393,35 +457,26 @@ export const demoBackendInterceptor: HttpInterceptorFn = (
     // stopped at the gate by a password only the author knows.
     if (first === 'login' && method === 'POST') {
       const email = text(body.email, 'demo@taskmanager.dev');
-      let user = db.users.find((candidate) => candidate.email === email);
-      if (!user) {
-        user = {
-          id: nextId(db),
-          name: email.split('@')[0] || 'Demo User',
-          email,
-          created_at: new Date().toISOString(),
-        };
-        db.users.push(user);
-        save(db);
-      }
+      const store = loadFor(email);
+      const user = store.users[0];
+      // the cache currently belongs to whoever was signed in before
+      cache = null;
+      cacheKey = '';
       return ok({ token: fakeToken(user), user });
     }
 
     if (first === 'register' && method === 'POST') {
       const email = text(body.email, 'demo@taskmanager.dev');
-      const existing = db.users.find((candidate) => candidate.email === email);
-      const user: DemoUser = existing ?? {
-        id: nextId(db),
-        name: text(body.name, email.split('@')[0] || 'Demo User'),
-        email,
-        created_at: new Date().toISOString(),
-      };
-      if (!existing) {
-        db.users.push(user);
-      } else {
-        user.name = text(body.name, user.name);
+      const store = loadFor(email);
+      const user = store.users[0];
+      user.name = text(body.name, user.name);
+      try {
+        localStorage.setItem(keyFor(email), JSON.stringify(store));
+      } catch {
+        // private mode
       }
-      save(db);
+      cache = null;
+      cacheKey = '';
       return ok({ token: fakeToken(user), user }, 201);
     }
 
@@ -692,7 +747,7 @@ function installResetHook(): void {
   window.__resetDemo = () => {
     cache = null;
     try {
-      localStorage.removeItem(DB_KEY);
+      localStorage.removeItem(currentKey());
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
     } catch {
